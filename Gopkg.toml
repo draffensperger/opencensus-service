@@ -31,7 +31,7 @@
 
 [[constraint]]
   branch = "master"
-  name = "github.com/census-instrumentation/opencensus-proto"
+  name = "github.com/draffensperger/opencensus-proto"
 
 [[constraint]]
   name = "github.com/golang/protobuf"
