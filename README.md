@@ -164,6 +164,12 @@ First, install ocagent if you haven't.
 $ go get github.com/census-instrumentation/opencensus-service/cmd/ocagent
 ```
 
+Also install the agent exporter if you haven't:
+
+```shell
+$ go get contrib.go.opencensus.io/exporter/ocagent
+```
+
 ### Configuration file
 
 Create a config.yaml file in the current directory and modify
@@ -177,7 +183,7 @@ For example, to allow trace exporting to Stackdriver and Zipkin:
 ```yaml
 stackdriver:
   project: "your-project-id"
-  enableTraces: true
+  enable_tracing: true
 
 zipkin:
   endpoint: "http://localhost:9411/api/v2/spans"
