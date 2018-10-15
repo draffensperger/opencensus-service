@@ -5,7 +5,7 @@ require (
 	github.com/DataDog/datadog-go v0.0.0-20180822151419-281ae9f2d895 // indirect
 	github.com/DataDog/opencensus-go-exporter-datadog v0.0.0-20180917103902-e6c7f767dc57
 	github.com/aws/aws-sdk-go v1.15.40 // indirect
-	github.com/census-instrumentation/opencensus-proto v0.0.2
+	github.com/census-instrumentation/opencensus-proto interaction-proto
 	github.com/golang/protobuf v1.2.0
 	github.com/googleapis/gax-go v2.0.0+incompatible // indirect
 	github.com/openzipkin/zipkin-go v0.1.1
