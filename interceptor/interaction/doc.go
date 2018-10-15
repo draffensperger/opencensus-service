@@ -12,31 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Sample contains a program that exports to the OpenCensus service.
-package main
-
-import (
-	"context"
-	"log"
-	"time"
-
-	"contrib.go.opencensus.io/exporter/ocagent"
-	"go.opencensus.io/trace"
-)
-
-func main() {
-	oce, err := ocagent.NewExporter(ocagent.WithInsecure())
-	if err != nil {
-		log.Fatalf("Failed to create ocagent-exporter: %v", err)
-	}
-	trace.RegisterExporter(oce)
-	trace.ApplyConfig(trace.Config{
-		DefaultSampler: trace.AlwaysSample(),
-	})
-
-	for {
-		_, span := trace.StartSpan(context.Background(), "foo")
-		time.Sleep(100 * time.Millisecond)
-		span.End()
-	}
-}
+/*
+interactioninterceptor is the logic for receiving OpenCensus interaction
+protobuf defined UI interactions from end user clients (e.g. web browsers,
+mobile devices) and passes them onto a spanreceiver instance.
+*/
+package interactioninterceptor
