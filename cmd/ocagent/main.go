@@ -49,19 +49,28 @@ func main() {
 		log.Fatalf("Failed to parse own configuration %v error: %v", exportersYAMLConfigFile, err)
 	}
 
-	ocInterceptorAddr := ownConfig.openCensusInterceptorAddressOrDefault()
-
 	traceExporters, _, closeFns := exporterparser.ExportersFromYAMLConfig(yamlBlob)
 
 	commonSpanReceiver := exporter.OCExportersToTraceExporter(traceExporters...)
 
-	// Add other interceptors here as they are implemented
+	ocInterceptorAddr := ownConfig.openCensusInterceptorAddressOrDefault()
 	ocInterceptorDoneFn, err := runOCInterceptor(ocInterceptorAddr, commonSpanReceiver)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	closeFns = append(closeFns, ocInterceptorDoneFn)
+
+	if ownConfig.interactionInterceptorEnabled() {
+		iaInterceptorGrpcAddr := ownConfig.interactionInterceptorGrpcAddressOrDefault()
+		iaInterceptorHttpAddr := ownConfig.interactionInterceptorHttpAddressOrDefault()
+		iaInterceptorDoneFn, err := runIaInterceptor(iaInterceptorGrpcAddr, iaInterceptorHttpAddr, commonSpanReceiver)
+		if err != nil {
+			log.Fatal(err)
+		}
+		closeFns = append(closeFns, iaInterceptorDoneFn)
+	}
+
+	// Add other interceptors here as they are implemented
 
 	// Always cleanup finally
 	defer func() {
@@ -103,5 +112,33 @@ func runOCInterceptor(addr string, sr spanreceiver.SpanReceiver) (doneFn func(),
 		_ = srv.Serve(ln)
 	}()
 	doneFn = func() { _ = ln.Close() }
+	return doneFn, nil
+}
+
+func runIaInterceptor(grpcAddr string, httpAddr string, sr spanreceiver.SpanReceiver) (doneFn func(), err error) {
+	log.Printf("Running interaction interceptor..")
+	// oci, err := iainterceptor.New(sr, ocinterceptor.WithSpanBufferPeriod(800*time.Millisecond))
+	// if err != nil {
+	// 	return nil, fmt.Errorf("Failed to create the OpenCensus interceptor: %v", err)
+	// }
+
+	// ln, err := net.Listen("tcp", addr)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("Cannot bind to address %q: %v", addr, err)
+	// }
+	// srv := internal.GRPCServerWithObservabilityEnabled()
+	// if err := view.Register(internal.AllViews...); err != nil {
+	// 	return nil, fmt.Errorf("Failed to register internal.AllViews: %v", err)
+	// }
+	// if err := view.Register(ocgrpc.DefaultServerViews...); err != nil {
+	// 	return nil, fmt.Errorf("Failed to register ocgrpc.DefaultServerViews: %v", err)
+	// }
+
+	// agenttracepb.RegisterTraceServiceServer(srv, oci)
+	// go func() {
+	// 	log.Printf("Running OpenCensus interceptor as a gRPC service at %q", addr)
+	// 	_ = srv.Serve(ln)
+	// }()
+	doneFn = func() {}
 	return doneFn, nil
 }

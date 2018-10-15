@@ -13,8 +13,8 @@
 // limitations under the License.
 
 /*
-interactioninterceptor is the logic for receiving OpenCensus interaction
+iainterceptor is the logic for receiving OpenCensus interaction
 protobuf defined UI interactions from end user clients (e.g. web browsers,
 mobile devices) and passes them onto a spanreceiver instance.
 */
-package interactioninterceptor
+package iainterceptor
