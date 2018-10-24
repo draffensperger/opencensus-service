@@ -1,0 +1,11 @@
+stackdriver:
+  project: "opencensus-web-test"
+  enable_tracing: true
+
+interaction_interceptor:
+  enable: true
+  # grpc_address: "127.0.0.1:55678"
+  # http_address: "127.0.0.1:55678"
+
+opencensus_interceptor:
+    address: "localhost:55678"
