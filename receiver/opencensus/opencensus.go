@@ -51,7 +51,6 @@ type Receiver struct {
 
 	stopOnce                 sync.Once
 	startServerOnce          sync.Once
-	startHTTPServerOnce      sync.Once
 	startTraceReceiverOnce   sync.Once
 	startMetricsReceiverOnce sync.Once
 }
@@ -68,7 +67,7 @@ func New(addr string, opts ...Option) (*Receiver, error) {
 	// TODO: (@odeke-em) use options to enable address binding changes.
 	ln, err := net.Listen("tcp", addr)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to bind to gRPC address %q: %v", addr, err)
+		return nil, fmt.Errorf("Failed to bind to address %q: %v", addr, err)
 	}
 
 	ocr := &Receiver{ln: ln}
