@@ -1,0 +1,10 @@
+# config.yaml for OC service
+receivers:
+  opencensus:
+    address: ":55678"
+    cors_allowed_origins:
+      - http://localhost:*
+exporters:
+  stackdriver:
+      project: "opencensus-web-test"
+      enable_tracing: true
