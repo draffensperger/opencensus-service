@@ -228,12 +228,19 @@ func (ocr *Receiver) Stop() error {
 	return err
 }
 
+func serveTime(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "%f", float64(time.Now().UnixNano())/1e6)
+}
+
 func (ocr *Receiver) httpServer() *http.Server {
 	ocr.mu.Lock()
 	defer ocr.mu.Unlock()
 
 	if ocr.serverHTTP == nil {
-		var mux http.Handler = ocr.gatewayMux
+		httpMux := http.NewServeMux()
+		httpMux.HandleFunc("/v1/time", serveTime)
+		httpMux.Handle("/", ocr.gatewayMux)
+		var mux http.Handler = httpMux
 		if len(ocr.corsOrigins) > 0 {
 			co := cors.Options{AllowedOrigins: ocr.corsOrigins}
 			mux = cors.New(co).Handler(mux)
