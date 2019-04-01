@@ -229,6 +229,7 @@ func (ocr *Receiver) Stop() error {
 }
 
 func serveTime(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Timing-Allow-Origin", "*")
 	fmt.Fprintf(w, "%f", float64(time.Now().UnixNano())/1e6)
 }
 
